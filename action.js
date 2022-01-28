@@ -25,7 +25,7 @@ const logThenExit = (exitCode, message) => {
 
 startLogGroup('Setting up script...')
 
-const currentBranch = process.env.GITHUB_REF // Branch that the workflow got triggered from
+const currentBranch = (process.env.GITHUB_REF).replace("refs/heads/", "") // Branch that the workflow got triggered from. In format: "refs/heads/<branch-name>"
 log(`Branch workflow triggered from: ${currentBranch}`)
 let sequence = process.argv.slice(2)[0] // First 2 args are command and file name of script. Remove those.
 sequence = sequence.split(',')

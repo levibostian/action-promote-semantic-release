@@ -14,8 +14,8 @@ jobs:
         with:
           sequence: "foo,bar"
           githubToken: "xxx"
-  # Make branches from the given sequence to test all the different scenarios of the Action. 
-  test-branch-makes-new-branch:
+
+  test-action-on-push:
     name: Test Action can promote to new/exiting branch successfully.
     runs-on: ubuntu-latest
     steps:
@@ -24,5 +24,5 @@ jobs:
       - name: Test Action 
         uses: ./ 
         with:
-          sequence: "start-promoting-with-me,promote-me,promote-updates-me"
+          sequence: "${{ github.ref_name }},test-promoted-${{ github.ref_name }}"
           githubToken: "xxx"
