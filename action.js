@@ -71,7 +71,7 @@ log(`Merge in commits. If branch ${branchAhead} just got created, this command w
 exec(`git merge --ff ${currentBranch}`)
 
 startLogGroup(`Pushing changes to branch ${branchAhead}`)
-exec('git push')
+exec(`git push --set-upstream origin ${branchAhead}`)
 endLogGroup()
 
 startLogGroup('Cleanup...')
