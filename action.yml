@@ -1,0 +1,24 @@
+name: "promote semantic-release"
+description: "GitHub Action to promote your code to your next release. Promote develop to alpha, alpha to beta, beta to prod, etc."
+author: "levibostian"
+inputs: # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputs
+  sequence:
+    description: "Comma separated string containing the sequence of your releases that you follow for your project. Each item in the sequence is the name of a branch that you use in your project. Example: 'develop,alpha,beta,main'"
+    required: true
+  githubToken:
+    description: "GitHub personal access token for a GitHub account that has push access to the repository."
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout all branches and commits history for checking out and merging
+      uses: actions/checkout@v2
+      with: 
+        fetch-depth: 0
+    - name: Run promotion script 
+      run: node ${{ github.action_path }}/action.js ${{ inputs.sequence }}
+      shell: bash 
+
+branding:
+  icon: 'fast-forward'  
+  color: 'purple'

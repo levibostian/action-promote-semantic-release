@@ -1,0 +1,28 @@
+name: Test action
+
+on: [push]
+
+jobs:
+  test-branch-not-in-sequence:
+    name: Test branch not in sequence. Should exit. 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Thanks: https://github.com/actions/typescript-action/blob/b4f07da86601110b682c6f45ff575f5fbd0f8cdf/.github/workflows/test.yml#L18      
+      - name: Test Action 
+        uses: ./ 
+        with:
+          sequence: "foo,bar"
+          githubToken: "xxx"
+  # Make branches from the given sequence to test all the different scenarios of the Action. 
+  test-branch-makes-new-branch:
+    name: Test Action can promote to new/exiting branch successfully.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Thanks: https://github.com/actions/typescript-action/blob/b4f07da86601110b682c6f45ff575f5fbd0f8cdf/.github/workflows/test.yml#L18      
+      - name: Test Action 
+        uses: ./ 
+        with:
+          sequence: "start-promoting-with-me,promote-me,promote-updates-me"
+          githubToken: "xxx"
