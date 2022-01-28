@@ -29,7 +29,7 @@ sequence = sequence.split(",")
 log(`Sequence: ${sequence}`)
 
 if (!sequence.includes(currentBranch)) {
-  return log_then_exit(0, "Branch is not configured to be promoted. Nothing for me to do here. Exiting.")
+  return logThenExit(0, "Branch is not configured to be promoted. Nothing for me to do here. Exiting.")
 }
 
 branchBehind = undefined
