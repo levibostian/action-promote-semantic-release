@@ -82,5 +82,4 @@ if (branchBehind) {
 } else {
   log(`Branch is start of sequence. No need to delete branch ${currentBranch}.`)
 }
-
 endLogGroup()
