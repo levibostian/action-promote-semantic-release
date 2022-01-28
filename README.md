@@ -39,6 +39,7 @@ jobs:
 
 The action comes with the following inputs:
 * `sequence` (required) - comma separated string containing the sequence of your releases that you follow for your project. Each item in the sequence is the name of a branch that you use in your project. 
+* `promoteToBranch` (optional) - By default, Action will promote existing branch to next branch in sequence. If you want to instead jump directly to a different branch in the sequence, enter it here.
 * `githubToken` (required) - a [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) for a GitHub account that has push access to the repository. This Action pushes code to branches of your repository. 
 
 # How does this Action work? 
