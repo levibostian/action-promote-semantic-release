@@ -3,6 +3,16 @@ name: Promote releases
 
 on: 
   workflow_dispatch: # manually run this Action so you decide when deployments happen
+    inputs:
+      promoteBranch:
+        description: 'What release to promote to?'     
+        required: false
+        default: ""
+        type: choice
+        options:
+        - alpha
+        - beta
+        - main
 
 jobs:
   promote-release:
@@ -15,3 +25,4 @@ jobs:
         with:
           sequence: "develop,alpha,beta,main"
           githubToken: ${{ secrets.BOT_PUSH_TOKEN }}
+          promoteToBranch: ${{ github.event.inputs.promoteBranch }}
