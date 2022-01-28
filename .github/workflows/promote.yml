@@ -1,0 +1,17 @@
+# Yeah, we are using our own action to promote releases!!
+name: Promote releases
+
+on: 
+  workflow_dispatch: # manually run this Action so you decide when deployments happen
+
+jobs:
+  promote-release:
+    name: Promote a branch to the next release 
+    runs-on: ubuntu-latest # Action is tested with Linux and it's recommended to use Linux. 
+    steps:
+      - uses: actions/checkout@v2
+      - name: Promote release 
+        uses: ./ 
+        with:
+          sequence: "develop,alpha,beta,main"
+          githubToken: ${{ secrets.BOT_PUSH_TOKEN }}

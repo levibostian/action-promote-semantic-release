@@ -1,0 +1,45 @@
+name: Test action
+
+on: [push]
+
+env:
+  # use `GITHUB_TOKEN` because when the action pushes new branches we don't 
+  # want to run more workflows. it would create an infinite loop of creating branches.
+  githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  test-branch-not-in-sequence:
+    name: Test branch not in sequence. Should exit. 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Thanks: https://github.com/actions/typescript-action/blob/b4f07da86601110b682c6f45ff575f5fbd0f8cdf/.github/workflows/test.yml#L18      
+      - name: Test Action 
+        uses: ./ 
+        with:
+          sequence: "foo,bar"
+          githubToken: ${{ env.githubToken }}
+
+  test-no-promote-branch-end-of-sequence:
+    name: Test branch end of sequence. Should exit.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Thanks: https://github.com/actions/typescript-action/blob/b4f07da86601110b682c6f45ff575f5fbd0f8cdf/.github/workflows/test.yml#L18      
+      - name: Test Action 
+        uses: ./ 
+        with:
+          sequence: "test-branch-behind-${{ github.ref_name }},${{ github.ref_name }}"
+          githubToken: ${{ env.githubToken }}
+
+  test-action-on-push:
+    name: Test promote to new/exiting branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Thanks: https://github.com/actions/typescript-action/blob/b4f07da86601110b682c6f45ff575f5fbd0f8cdf/.github/workflows/test.yml#L18      
+      - name: Test Action 
+        uses: ./ 
+        with:
+          sequence: "${{ github.ref_name }},test-promoted-${{ github.ref_name }}"
+          githubToken: ${{ env.githubToken }}

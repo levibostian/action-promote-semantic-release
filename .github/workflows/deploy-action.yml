@@ -1,0 +1,34 @@
+name: Deploy action 
+on:
+  push:
+    branches: [main, beta, alpha]
+
+jobs:
+  deploy:
+    name: Deploy git tag
+    runs-on: ubuntu-latest
+    steps:
+      # To make git commits made by semantic-release be made to our bot and not "github-actions" user which doesn't trigger other Action Workflows. 
+      # https://github.com/semantic-release/semantic-release/blob/2c30e268f9484adeb2b9d0bdf52c1cd909779d64/docs/recipes/ci-configurations/github-actions.md#pushing-packagejson-changes-to-a-master-branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      # Fixes: https://github.com/semantic-release/git/issues/136
+      # because v1 tag in repo gets updated on each deployment. 
+      - name: Fix (would clobber existing tag)
+        run: git fetch -tp -f --all
+      - name: Deploy via semantic release 
+        uses: cycjimmy/semantic-release-action@v2
+        with: 
+          # version numbers below can be in many forms: M, M.m, M.m.p
+          semantic_version: 18
+          extra_plugins: |
+            @semantic-release/commit-analyzer@9
+            @semantic-release/release-notes-generator@10
+            @semantic-release/changelog@6
+            @semantic-release/git@10
+            @semantic-release/github@8
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT_PUSH_TOKEN }}
