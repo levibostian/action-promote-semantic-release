@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import process from 'node:process'
+const process = require('process')
 
 const log = message => {
 	console.log(`[action-promote-semantic-release] ${message}`)
