@@ -19,7 +19,12 @@ jobs:
     name: Promote a branch to the next release 
     runs-on: ubuntu-latest # Action is tested with Linux and it's recommended to use Linux. 
     steps:
+      # To make git commits made by semantic-release be made to our bot and not "github-actions" user which doesn't trigger other Action Workflows. 
+      # https://github.com/semantic-release/semantic-release/blob/2c30e268f9484adeb2b9d0bdf52c1cd909779d64/docs/recipes/ci-configurations/github-actions.md#pushing-packagejson-changes-to-a-master-branch
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - name: Promote release 
         uses: ./ 
         with:
