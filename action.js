@@ -1,47 +1,52 @@
+#!/usr/bin/env node
 
-const log = (message) => {
-  console.log(`[action-promote-semantic-release] ${message}`)
+import process from 'node:process'
+
+const log = message => {
+	console.log(`[action-promote-semantic-release] ${message}`)
 }
 
-const startLogGroup = (message) => {
-  console.log(`\n::group::${message}`)
+const startLogGroup = message => {
+	console.log(`\n::group::${message}`)
 }
 
 const endLogGroup = () => {
-  console.log("::endgroup::")
+	console.log('::endgroup::')
 }
 
 const logThenExit = (exitCode, message) => {
-  // end log group so error message shows up not in a group. 
-  end_log_group()
+	// End log group so error message shows up not in a group.
+	endLogGroup()
 
-  log(message)
+	log(message)
 
-  process.exit(exitCode)
+	process.exit(exitCode)
 }
 
-startLogGroup("Setting up script...") 
+startLogGroup('Setting up script...')
 
-let currentBranch = process.env.GITHUB_REF // branch that the workflow got triggered from
+const currentBranch = process.env.GITHUB_REF // Branch that the workflow got triggered from
 log(`Branch workflow triggered from: ${currentBranch}`)
-let sequence = process.argv.slice(2)[0] // first 2 args are command and file name of script. Remove those. 
-sequence = sequence.split(",")
+let sequence = process.argv.slice(2)[0] // First 2 args are command and file name of script. Remove those.
+sequence = sequence.split(',')
 log(`Sequence: ${sequence}`)
 
 if (!sequence.includes(currentBranch)) {
-  return logThenExit(0, "Branch is not configured to be promoted. Nothing for me to do here. Exiting.")
+	logThenExit(0, 'Branch is not configured to be promoted. Nothing for me to do here. Exiting.')
 }
 
-branchBehind = undefined
+let branchBehind
 if (sequence.indexOf(currentBranch) > 0) {
-  branchBehind = sequence[sequence.indexOf(currentBranch) - 1]
+	branchBehind = sequence[sequence.indexOf(currentBranch) - 1]
 }
-log(`Branch behind current in sequence: ${branchBehind || "none"}`)
-branchAhead = undefined
+
+log(`Branch behind current in sequence: ${branchBehind || 'none'}`)
+let branchAhead
 if ((sequence.indexOf(currentBranch) + 1) < sequence.length) {
-  branchAhead = sequence[sequence.indexOf(currentBranch) + 1]
+	branchAhead = sequence[sequence.indexOf(currentBranch) + 1]
 }
-log(`Branch ahead current in sequence: ${branchAhead || "none"}`)
+
+log(`Branch ahead current in sequence: ${branchAhead || 'none'}`)
 
 endLogGroup()
 
