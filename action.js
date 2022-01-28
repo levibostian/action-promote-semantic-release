@@ -36,7 +36,7 @@ startLogGroup('Setting up script...')
 
 const currentBranch = (process.env.GITHUB_REF).replace('refs/heads/', '') // Branch that the workflow got triggered from. In format: "refs/heads/<branch-name>"
 log(`Branch workflow triggered from: ${currentBranch}`)
-let argv = process.argv.slice(2) // First 2 args are command and file name of script. Remove those.
+const argv = process.argv.slice(2) // First 2 args are command and file name of script. Remove those.
 let sequence = argv[0]
 sequence = sequence.split(',')
 log(`Sequence: ${sequence}`)
@@ -59,13 +59,15 @@ if ((sequence.indexOf(currentBranch) + 1) < sequence.length) {
 if (!branchAhead) {
 	logThenExit(0, 'No branch to promote the current branch to. Nothing for me to do here. Exiting.')
 }
+
 log(`Branch ahead current in sequence: ${branchAhead || 'none'}`)
 
 let promoteToBranch = argv[1]
 // Use default promote branch if argv is not a good format, if branch not in sequence, or if branch is not ahead of current branch in sequence.
-if (!promoteToBranch || promoteToBranch = "" || !sequence.includes(promoteToBranch) || sequence.indexOf(promoteToBranch) < sequence.indexOf(currentBranch)) {
-  promoteToBranch = branchAhead // default is to promote to branch ahead. 
+if (!promoteToBranch || promoteToBranch === '' || !sequence.includes(promoteToBranch) || sequence.indexOf(promoteToBranch) < sequence.indexOf(currentBranch)) {
+	promoteToBranch = branchAhead // Default is to promote to branch ahead.
 }
+
 log(`Branch we are going to promote to: ${promoteToBranch}`)
 
 endLogGroup()
@@ -87,6 +89,7 @@ if (branchBehind) {
 	log(`Deleting branch: ${currentBranch}`)
 	exec(`git push origin --delete ${currentBranch}`)
 } else {
-  log(`Branch is start of sequence. No need to delete branch ${currentBranch}.`)
+	log(`Branch is start of sequence. No need to delete branch ${currentBranch}.`)
 }
+
 endLogGroup()
