@@ -79,6 +79,8 @@ if (branchBehind) {
 	log('There is a branch behind this one in the sequence. That means this branch is a temporary release branch. Action will delete current branch.')
 	log(`Deleting branch: ${currentBranch}`)
 	exec(`git push origin --delete ${currentBranch}`)
+} else {
+  log(`Branch is start of sequence. No need to delete branch ${currentBranch}.`)
 }
 
 endLogGroup()
