@@ -19,6 +19,7 @@ runs:
       uses: actions/checkout@v2
       with: 
         fetch-depth: 0
+        token: ${{ inputs.githubToken }}
     - name: Run promotion script 
       run: node ${{ github.action_path }}/action.js ${{ inputs.sequence }} ${{ inputs.promoteToBranch }}
       shell: bash 
