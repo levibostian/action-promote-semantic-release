@@ -36,7 +36,8 @@ startLogGroup('Setting up script...')
 
 const currentBranch = (process.env.GITHUB_REF).replace('refs/heads/', '') // Branch that the workflow got triggered from. In format: "refs/heads/<branch-name>"
 log(`Branch workflow triggered from: ${currentBranch}`)
-let sequence = process.argv.slice(2)[0] // First 2 args are command and file name of script. Remove those.
+let argv = process.argv.slice(2) // First 2 args are command and file name of script. Remove those.
+let sequence = argv[0]
 sequence = sequence.split(',')
 log(`Sequence: ${sequence}`)
 
@@ -58,20 +59,26 @@ if ((sequence.indexOf(currentBranch) + 1) < sequence.length) {
 if (!branchAhead) {
 	logThenExit(0, 'No branch to promote the current branch to. Nothing for me to do here. Exiting.')
 }
-
 log(`Branch ahead current in sequence: ${branchAhead || 'none'}`)
+
+let promoteToBranch = argv[1]
+// Use default promote branch if argv is not a good format, if branch not in sequence, or if branch is not ahead of current branch in sequence.
+if (!promoteToBranch || promoteToBranch = "" || !sequence.includes(promoteToBranch) || sequence.indexOf(promoteToBranch) < sequence.indexOf(currentBranch)) {
+  promoteToBranch = branchAhead // default is to promote to branch ahead. 
+}
+log(`Branch we are going to promote to: ${promoteToBranch}`)
 
 endLogGroup()
 
-startLogGroup(`Switch to branch ${branchAhead} and copy over commits.`)
+startLogGroup(`Switch to branch ${promoteToBranch} and copy over commits.`)
 
 log('Checkout branch or create if not exist.')
-exec(`git switch --create ${branchAhead}`)
-log(`Merge in commits. If branch ${branchAhead} just got created, this command will not do anything.`)
+exec(`git switch --create ${promoteToBranch}`)
+log(`Merge in commits. If branch ${promoteToBranch} just got created, this command will not do anything.`)
 exec(`git merge --ff ${currentBranch}`)
 
-startLogGroup(`Pushing changes to branch ${branchAhead}`)
-exec(`git push --set-upstream origin ${branchAhead}`)
+startLogGroup(`Pushing changes to branch ${promoteToBranch}`)
+exec(`git push --set-upstream origin ${promoteToBranch}`)
 endLogGroup()
 
 startLogGroup('Cleanup...')

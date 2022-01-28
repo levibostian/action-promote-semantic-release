@@ -5,6 +5,10 @@ inputs: # https://docs.github.com/en/actions/creating-actions/metadata-syntax-fo
   sequence:
     description: "Comma separated string containing the sequence of your releases that you follow for your project. Each item in the sequence is the name of a branch that you use in your project. Example: 'develop,alpha,beta,main'"
     required: true
+  promoteToBranch:
+    description: "By default, Action will promote existing branch to next branch in sequence. If you want to instead jump directly to a different branch in the sequence, enter it here."
+    required: false 
+    default: ""
   githubToken:
     description: "GitHub personal access token for a GitHub account that has push access to the repository."
     required: true
@@ -16,7 +20,7 @@ runs:
       with: 
         fetch-depth: 0
     - name: Run promotion script 
-      run: node ${{ github.action_path }}/action.js ${{ inputs.sequence }}
+      run: node ${{ github.action_path }}/action.js ${{ inputs.sequence }} ${{ inputs.promoteToBranch }}
       shell: bash 
 
 branding:
