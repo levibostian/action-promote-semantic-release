@@ -30,6 +30,8 @@ const exec = command => {
 	// Stderr is sent to stderr of parent process
 	const stdout = execSync(command)
 	log(stdout)
+
+	return stdout 
 }
 
 startLogGroup('Setting up script...')
@@ -74,11 +76,20 @@ endLogGroup()
 
 startLogGroup(`Switch to branch ${promoteToBranch} and copy over commits.`)
 
-log('Checkout branch or create if not exist.')
-exec(`git switch --create ${promoteToBranch}`)
-log(`Merge in commits. If branch ${promoteToBranch} just got created, this command will not do anything.`)
-exec(`git merge --ff ${currentBranch}`)
+log(`Checking if ${promoteToBranch} exists on remote git repository or not.`)
+// if command has any STDOUT, the branch exists. 
+let promoteToBranchExistsRemote = exec(`git ls-remote --heads $(git config --get remote.origin.url) ${promoteToBranch}`) != ""
+if (promoteToBranchExistsRemote) {
+	log(`Branch ${promoteToBranch} does exist on remote git repository already. Pulling it now.`)
+	exec(`git checkout --track origin/${promoteToBranch}`)
 
+	log(`Merge commits from ${currentBranch} into ${promoteToBranch}`)
+	exec(`git merge --ff ${currentBranch}`)
+} else {
+	log(`Branch ${promoteToBranch} does not exist on remote git repository already. Creating it now.`)
+	exec(`git switch --create ${promoteToBranch}`)
+}
+ 
 startLogGroup(`Pushing changes to branch ${promoteToBranch}`)
 exec(`git push --set-upstream origin ${promoteToBranch}`)
 endLogGroup()
