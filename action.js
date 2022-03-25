@@ -89,7 +89,7 @@ if (promoteToBranchExistsRemote) {
 	log(`Branch ${promoteToBranch} does not exist on remote git repository already. Creating it now.`)
 	exec(`git switch --create ${promoteToBranch}`)
 }
-
+ 
 startLogGroup(`Pushing changes to branch ${promoteToBranch}`)
 exec(`git push --set-upstream origin ${promoteToBranch}`)
 endLogGroup()
