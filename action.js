@@ -38,10 +38,11 @@ const exec = command => {
 		log('✅ Running command success!')
 
 		return stdout
-	} catch {
+	} catch (error) {
 		if (error.stdout) {
 			log(error.stdout.toString())
 		}
+
 		if (error.stderr) {
 			log(error.stderr.toString())
 		}
