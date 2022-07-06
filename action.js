@@ -32,7 +32,7 @@ const exec = command => {
 	log(`$> ${command}`)
 
 	try {
-		const stdout = execSync(command).trim()
+		const stdout = execSync(command).toString().trim()
 		log(stdout)
 
 		log('✅ Running command success!')
