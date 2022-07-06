@@ -103,8 +103,6 @@ log(`Current branch: ${currentBranch}. Branch we are going to promote to: ${prom
 
 log('Setup is complete! Now running commands....')
 
-log('\n\n')
-
 log(`Checking if branch ${promoteToBranch} exists already...`)
 log('Running command "git ls-remote..." and if command prints anything out to us, the branch exists already.')
 // If command has any STDOUT, the branch exists.
@@ -123,19 +121,14 @@ if (promoteToBranchExistsRemote) {
 	exec(`git switch --create ${promoteToBranch}`)
 }
 
-log('\n\n')
 log(`Now that branch ${promoteToBranch} has all of the latest commits in it, time to push the changes!`)
 exec(`git push --set-upstream origin ${promoteToBranch}`)
-
-log('\n\n')
 
 if (branchBehind) {
 	log(`There is a branch behind ${currentBranch} in the sequence: ${branchBehind}. That means branch ${currentBranch} is a temporary release branch. Let's delete ${currentBranch} as it's no longer needed.`)
 	log(`Deleting branch: ${currentBranch}`)
 	exec(`git push origin --delete ${currentBranch}`)
 }
-
-log('\n\n')
 
 if (scriptFailedRunningCommand) {
 	logThenExit(1, 'Looks like a command failed. Exiting the script with an error to notify you to fix it..')
