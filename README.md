@@ -35,12 +35,16 @@ jobs:
         with:
           sequence: "develop,alpha,beta,main"
           githubToken: ${{ secrets.BOT_PUSH_TOKEN }}
+          gitName: "Deploy bot"
+          gitEmail: "deploy@yourcompany.com"
 ```
 
 The action comes with the following inputs:
 * `sequence` (required) - comma separated string containing the sequence of your releases that you follow for your project. Each item in the sequence is the name of a branch that you use in your project. 
-* `promoteToBranch` (optional) - By default, Action will promote existing branch to next branch in sequence. If you want to instead jump directly to a different branch in the sequence, enter it here.
 * `githubToken` (required) - a [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) for a GitHub account that has push access to the repository. This Action pushes code to branches of your repository. 
+* `promoteToBranch` (optional) - By default, Action will promote existing branch to next branch in sequence. If you want to instead jump directly to a different branch in the sequence, enter it here.
+* `gitName` (optional) - In case a merge commit needs to be made, what git name should be used for the merge commit? Note: If this is not provided and a merge commit is attempted to be made, the promote script will fail.
+* `gitEmail` (optional) - In case a merge commit needs to be made, what git email address should be used for the merge commit? Note: If this is not provided and a merge commit is attempted to be made, the promote script will fail.
 
 # How does this Action work? 
 
@@ -55,6 +59,8 @@ This is the flow of how the workflow operates:
 This action is a [composite GitHub Action](https://docs.github.com/en/actions/creating-actions/creating-a-composite-action) mostly relying on bash scripts to run commands. This means there is nothing for you to install to create a development environment on your computer. However, this also means that testing the action is more difficult. To test this action, we rely on running the action on GitHub Actions. See `.github/workflows/test-action.yml` for an example of how we test this action. 
 
 All changes made to the code require making a pull request into `develop` branch with the title conforming to the [conventional commit format](https://www.conventionalcommits.org/).
+
+Before pushing code, it would be nice if you would lint it. `npm i -g xo && xo --fix` will do the trick. 
 
 # Deployment
 
