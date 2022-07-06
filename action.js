@@ -6,8 +6,10 @@ const {execSync} = require('child_process')
 
 let scriptFailedRunningCommand = false
 
+const nameOfTool = 'action-promote-semantic-release'
+
 const log = message => {
-	console.log(`[action-promote-semantic-release] ${message}`)
+	console.log(`[${nameOfTool}] ${message}`)
 }
 
 const logThenExit = (exitCode, message) => {
@@ -33,7 +35,7 @@ const exec = command => {
 		const stdout = execSync(command)
 		log(stdout)
 
-		log(`✅ Running command success! ${command}`)
+		log('✅ Running command success!')
 
 		return stdout
 	} catch {
@@ -47,7 +49,15 @@ const exec = command => {
 	}
 }
 
+log(`Welcome to ${nameOfTool} (https://github.com/levibostian/${nameOfTool})!`)
+log('This tool is built to execute some git commands meant to trigger a new deployment for your project.')
+log('Read the log statements printed to you as the tool runs to learn what it is doing.')
+log('In case there is an error, you should be able to manually run all of the commands printed by this tool yourself.\n\n')
+
 log('Setting up script...')
+
+log('Making sure that we have all of the latest changes from the git project.')
+exec('git fetch')
 
 const currentBranch = (process.env.GITHUB_REF).replace('refs/heads/', '') // Branch that the workflow got triggered from. In format: "refs/heads/<branch-name>"
 log(`Branch workflow triggered from: ${currentBranch}`)
@@ -89,17 +99,22 @@ log('Setup is complete! Now running commands....')
 
 log('\n\n')
 
-log('***Note*** This tool is designed to help you in case something goes wrong. Each command that is executed will be printed to the screen. If any of the commands fails, the tool will tell you what failed and will then print all of the rest of the commands that the tool meant to run. This will allow you to all of the commands manually yourself if the tool ever fails.')
+log('***Note*** This tool is designed to help you in case something goes wrong. Each command that is executed will be printed to the screen.')
+log('If any of the commands fails, the tool will tell you what failed and will then print all of the rest of the commands that the tool meant to run.')
+log('This will allow you to run all of the commands manually yourself if the tool ever fails.')
 
 log('\n\n')
 
-log(`Checking if ${promoteToBranch} exists already...`)
+log(`Checking if branch ${promoteToBranch} exists already...`)
 log('Running command "git ls-remote..." and if command prints anything out to us, the branch exists already.')
 // If command has any STDOUT, the branch exists.
 const promoteToBranchExistsRemote = exec(`git ls-remote --heads $(git config --get remote.origin.url) ${promoteToBranch}`) !== ''
 if (promoteToBranchExistsRemote) {
 	log(`Branch ${promoteToBranch} *does* exist already. Checking it out now so we can update it.`)
 	exec(`git checkout --track origin/${promoteToBranch}`)
+
+	log('Always a good idea to pull the branch to make sure we have all of the latest changes to the branch')
+	exec('git pull')
 
 	log(`Merge commits from ${currentBranch} into ${promoteToBranch} so we can give branch ${promoteToBranch} the latest changes.`)
 	exec(`git merge --ff ${currentBranch}`)
@@ -119,4 +134,6 @@ if (branchBehind) {
 	log(`Deleting branch: ${currentBranch}`)
 	exec(`git push origin --delete ${currentBranch}`)
 }
+
+log('Done! All commands executed successfully.')
 
