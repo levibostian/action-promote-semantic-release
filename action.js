@@ -7,6 +7,7 @@ const {execSync} = require('child_process')
 let scriptFailedRunningCommand = false
 
 const nameOfTool = 'action-promote-semantic-release'
+const iconUsedForLoggingCommandsExecuted = "➡️"
 
 const log = message => {
 	console.log(`[${nameOfTool}] ${message}`)
@@ -23,13 +24,13 @@ const logThenExit = (exitCode, message) => {
 const exec = command => {
 	if (scriptFailedRunningCommand) {
 		log('⚠️ Skipping running command because of previous failure.')
-		log(`$> ${command}`)
+		log(`${iconUsedForLoggingCommandsExecuted} ${command}`)
 
 		return
 	}
 
 	log('Running command...')
-	log(`$> ${command}`)
+	log(`${iconUsedForLoggingCommandsExecuted} ${command}`)
 
 	try {
 		const stdout = execSync(command).toString().trim()
@@ -56,9 +57,9 @@ log(`Welcome to ${nameOfTool} (https://github.com/levibostian/${nameOfTool})!`)
 log('This tool is built to execute some git commands meant to trigger a new deployment for your project.')
 log('Read the log statements printed to you as the tool runs to learn what it is doing.')
 log('\n')
-log('***Note*** This tool is designed to help you in case something goes wrong. Each command that is executed will be printed to the screen.')
+log(`***Note*** This tool is designed to help you in case something goes wrong. Each command to execute is printed to the screen with a ${iconUsedForLoggingCommandsExecuted} icon.`)
 log('If any of the commands fails, the tool will tell you what failed and will then print all of the rest of the commands that the tool meant to run.')
-log('This will allow you to run all of the commands manually yourself if the tool ever fails.')
+log(`This will allow you to run all of the commands (${iconUsedForLoggingCommandsExecuted}) manually yourself if the tool ever fails.`)
 
 log('Setting up script...')
 
