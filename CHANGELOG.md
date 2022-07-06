@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/levibostian/action-promote-semantic-release/compare/v1.0.1...v1.1.0) (2022-07-06)
+
+
+### Features
+
+* add more logging to help if any command ever fails ([#8](https://github.com/levibostian/action-promote-semantic-release/issues/8)) ([81764dc](https://github.com/levibostian/action-promote-semantic-release/commit/81764dc6c8b1e46898bb8123f943d5b3b0693cf8))
+* git config for merge commits ([#9](https://github.com/levibostian/action-promote-semantic-release/issues/9)) ([4a75e25](https://github.com/levibostian/action-promote-semantic-release/commit/4a75e25fd5e855902a74330aada86168e9ba9edf))
+
 ## [1.0.1](https://github.com/levibostian/action-promote-semantic-release/compare/v1.0.0...v1.0.1) (2022-03-25)
 
 
