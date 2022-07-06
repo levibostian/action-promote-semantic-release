@@ -39,13 +39,15 @@ const exec = command => {
 
 		return stdout
 	} catch {
+		if (error.stdout) {
+			log(error.stdout.toString())
+		}
+		if (error.stderr) {
+			log(error.stderr.toString())
+		}
+
 		log(`❌ Failed to execute command (${command}). You can try fixing the issue and running the tool again or, manually run all of the commands printed by this tool.`)
 		scriptFailedRunningCommand = true
-
-		// Error.status;
-		// error.message;
-		// error.stderr;  // Holds the stderr output. Use `.toString()`.
-		// error.stdout;  // Holds the stdout output. Use `.toString()`.
 	}
 }
 
