@@ -135,5 +135,11 @@ if (branchBehind) {
 	exec(`git push origin --delete ${currentBranch}`)
 }
 
-log('Done! All commands executed successfully.')
+log('\n\n')
+
+if (scriptFailedRunningCommand) {
+	logThenExit(1, 'Looks like a command failed. Exiting the script with an error to notify you to fix it..')
+} else {
+	log('Done! All commands executed successfully.')
+}
 
