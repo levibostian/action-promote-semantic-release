@@ -12,6 +12,12 @@ inputs: # https://docs.github.com/en/actions/creating-actions/metadata-syntax-fo
   githubToken:
     description: "GitHub personal access token for a GitHub account that has push access to the repository."
     required: true
+  gitName:
+    description: "In case a merge commit needs to be made, what git name should be used for the merge commit? Note: If this is not provided and a merge commit is attempted to be made, the promote script will fail."
+    required: false 
+  gitEmail:
+    description: "In case a merge commit needs to be made, what git email address should be used for the merge commit? Note: If this is not provided and a merge commit is attempted to be made, the promote script will fail."
+    required: false 
 runs:
   using: "composite"
   steps:
@@ -20,6 +26,10 @@ runs:
       with: 
         fetch-depth: 0
         token: ${{ inputs.githubToken }}
+    - name: Configure git if input variables have been provided for it
+      if: ${{ inputs.gitName != '' && inputs.gitEmail != '' }} 
+      run: git config user.name ${{ inputs.gitName }} && git config user.email ${{ inputs.gitEmail }}
+      shell: bash 
     - name: Run promotion script 
       run: node ${{ github.action_path }}/action.js ${{ inputs.sequence }} ${{ inputs.promoteToBranch }}
       shell: bash 
