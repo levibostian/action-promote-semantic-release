@@ -32,14 +32,14 @@ const exec = command => {
 	log(`$> ${command}`)
 
 	try {
-		const stdout = execSync(command)
+		const stdout = execSync(command).trim()
 		log(stdout)
 
 		log('✅ Running command success!')
 
 		return stdout
 	} catch {
-		log('❌ Failed to execute command. You can try fixing the issue and running the tool again or, manually run all of the commands printed by this tool')
+		log(`❌ Failed to execute command (${command}). You can try fixing the issue and running the tool again or, manually run all of the commands printed by this tool.`)
 		scriptFailedRunningCommand = true
 
 		// Error.status;
@@ -52,7 +52,10 @@ const exec = command => {
 log(`Welcome to ${nameOfTool} (https://github.com/levibostian/${nameOfTool})!`)
 log('This tool is built to execute some git commands meant to trigger a new deployment for your project.')
 log('Read the log statements printed to you as the tool runs to learn what it is doing.')
-log('In case there is an error, you should be able to manually run all of the commands printed by this tool yourself.\n\n')
+log('\n')
+log('***Note*** This tool is designed to help you in case something goes wrong. Each command that is executed will be printed to the screen.')
+log('If any of the commands fails, the tool will tell you what failed and will then print all of the rest of the commands that the tool meant to run.')
+log('This will allow you to run all of the commands manually yourself if the tool ever fails.')
 
 log('Setting up script...')
 
@@ -96,12 +99,6 @@ if (!promoteToBranch || promoteToBranch === '' || !sequence.includes(promoteToBr
 log(`Current branch: ${currentBranch}. Branch we are going to promote to: ${promoteToBranch}`)
 
 log('Setup is complete! Now running commands....')
-
-log('\n\n')
-
-log('***Note*** This tool is designed to help you in case something goes wrong. Each command that is executed will be printed to the screen.')
-log('If any of the commands fails, the tool will tell you what failed and will then print all of the rest of the commands that the tool meant to run.')
-log('This will allow you to run all of the commands manually yourself if the tool ever fails.')
 
 log('\n\n')
 
