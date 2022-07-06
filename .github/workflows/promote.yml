@@ -31,5 +31,5 @@ jobs:
           sequence: "develop,alpha,beta,main"
           githubToken: ${{ secrets.BOT_PUSH_TOKEN }}
           promoteToBranch: ${{ github.event.inputs.promoteBranch }}
-          gitName: "${{ secrets.BOT_GIT_NAME }}"
+          gitName: "CuriosityIO Bot"
           gitEmail: "${{ secrets.BOT_GIT_EMAIL }}"
