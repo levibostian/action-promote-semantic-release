@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-import process from 'node:process'
-import {execSync} from 'node:child_process'
+/* eslint-disable unicorn/prefer-module */
+const process = require('node:process')
+const {execSync} = require('child_process')
 
 let scriptFailedRunningCommand = false
 
