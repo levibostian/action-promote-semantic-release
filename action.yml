@@ -28,7 +28,7 @@ runs:
         token: ${{ inputs.githubToken }}
     - name: Configure git if input variables have been provided for it
       if: ${{ inputs.gitName != '' && inputs.gitEmail != '' }} 
-      run: git config user.name ${{ inputs.gitName }} && git config user.email ${{ inputs.gitEmail }}
+      run: git config user.name "${{ inputs.gitName }}" && git config user.email "${{ inputs.gitEmail }}"
       shell: bash 
     - name: Run promotion script 
       run: node ${{ github.action_path }}/action.js ${{ inputs.sequence }} ${{ inputs.promoteToBranch }}
