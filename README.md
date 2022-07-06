@@ -56,6 +56,8 @@ This action is a [composite GitHub Action](https://docs.github.com/en/actions/cr
 
 All changes made to the code require making a pull request into `develop` branch with the title conforming to the [conventional commit format](https://www.conventionalcommits.org/).
 
+Before pushing code, it would be nice if you would lint it. `npm i -g xo && xo --fix` will do the trick. 
+
 # Deployment
 
 Tags/releases are made automatically using [semantic-release](https://github.com/semantic-release/semantic-release) as long as our git commit messages are written in the [conventional commit format](https://www.conventionalcommits.org/). Just `git rebase ...` or `git merge` commits from `develop` into `alpha`, `beta`, or `main` to make a new deployment of the action. 
